@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.JituanwnehuaDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.jituanwnehua_uuid_number as jituanwnehuaUuidNumber
+        ,a.jituanwnehua_name as jituanwnehuaName
+        ,a.jituanwnehua_photo as jituanwnehuaPhoto
+        ,a.jituanwnehua_video as jituanwnehuaVideo
+        ,a.jituanwnehua_types as jituanwnehuaTypes
+        ,a.jituanwnehua_clicknum as jituanwnehuaClicknum
+        ,a.zan_number as zanNumber
+        ,a.cai_number as caiNumber
+        ,a.jituanwnehua_content as jituanwnehuaContent
+        ,a.jituanwnehua_delete as jituanwnehuaDelete
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.JituanwnehuaView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+
+        FROM jituanwnehua  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.jituanwnehuaUuidNumber != '' and params.jituanwnehuaUuidNumber != null and params.jituanwnehuaUuidNumber != 'null' ">
+                and a.jituanwnehua_uuid_number like CONCAT('%',#{params.jituanwnehuaUuidNumber},'%')
+            </if>
+            <if test=" params.jituanwnehuaName != '' and params.jituanwnehuaName != null and params.jituanwnehuaName != 'null' ">
+                and a.jituanwnehua_name like CONCAT('%',#{params.jituanwnehuaName},'%')
+            </if>
+            <if test=" params.jituanwnehuaVideo != '' and params.jituanwnehuaVideo != null and params.jituanwnehuaVideo != 'null' ">
+                and a.jituanwnehua_video like CONCAT('%',#{params.jituanwnehuaVideo},'%')
+            </if>
+            <if test="params.jituanwnehuaTypes != null and params.jituanwnehuaTypes != ''">
+                and a.jituanwnehua_types = #{params.jituanwnehuaTypes}
+            </if>
+            <if test="params.jituanwnehuaClicknumStart != null and params.jituanwnehuaClicknumStart != ''">
+                <![CDATA[  and a.jituanwnehua_clicknum >= #{params.jituanwnehuaClicknumStart}   ]]>
+            </if>
+            <if test="params.jituanwnehuaClicknumEnd != null and params.jituanwnehuaClicknumEnd != ''">
+                <![CDATA[  and a.jituanwnehua_clicknum <= #{params.jituanwnehuaClicknumEnd}   ]]>
+            </if>
+             <if test="params.jituanwnehuaClicknum != null and params.jituanwnehuaClicknum != ''">
+                and a.jituanwnehua_clicknum = #{params.jituanwnehuaClicknum}
+             </if>
+            <if test="params.zanNumberStart != null and params.zanNumberStart != ''">
+                <![CDATA[  and a.zan_number >= #{params.zanNumberStart}   ]]>
+            </if>
+            <if test="params.zanNumberEnd != null and params.zanNumberEnd != ''">
+                <![CDATA[  and a.zan_number <= #{params.zanNumberEnd}   ]]>
+            </if>
+             <if test="params.zanNumber != null and params.zanNumber != ''">
+                and a.zan_number = #{params.zanNumber}
+             </if>
+            <if test="params.caiNumberStart != null and params.caiNumberStart != ''">
+                <![CDATA[  and a.cai_number >= #{params.caiNumberStart}   ]]>
+            </if>
+            <if test="params.caiNumberEnd != null and params.caiNumberEnd != ''">
+                <![CDATA[  and a.cai_number <= #{params.caiNumberEnd}   ]]>
+            </if>
+             <if test="params.caiNumber != null and params.caiNumber != ''">
+                and a.cai_number = #{params.caiNumber}
+             </if>
+            <if test=" params.jituanwnehuaContent != '' and params.jituanwnehuaContent != null and params.jituanwnehuaContent != 'null' ">
+                and a.jituanwnehua_content like CONCAT('%',#{params.jituanwnehuaContent},'%')
+            </if>
+            <if test="params.jituanwnehuaDeleteStart != null and params.jituanwnehuaDeleteStart != ''">
+                <![CDATA[  and a.jituanwnehua_delete >= #{params.jituanwnehuaDeleteStart}   ]]>
+            </if>
+            <if test="params.jituanwnehuaDeleteEnd != null and params.jituanwnehuaDeleteEnd != ''">
+                <![CDATA[  and a.jituanwnehua_delete <= #{params.jituanwnehuaDeleteEnd}   ]]>
+            </if>
+             <if test="params.jituanwnehuaDelete != null and params.jituanwnehuaDelete != ''">
+                and a.jituanwnehua_delete = #{params.jituanwnehuaDelete}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+            <if test="params.insertTime != null and params.insertTime != ''">
+                and a.insert_time = #{params.insertTime}
+            </if>
+
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>
